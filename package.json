@@ -10,8 +10,10 @@
   "license": "ISC",
   "dependencies": {
     "node-audiorecorder": "^1.4.1",
+    "node-notifier": "^6.0.0",
     "node-record-lpcm16": "^1.0.1",
     "node-wav": "0.0.2",
+    "request": "^2.88.0",
     "wav": "^1.0.2"
   }
 }

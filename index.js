@@ -1,7 +1,9 @@
 const recorder = require('node-record-lpcm16')
-const fs = require('fs')
-const wav = require('wav')
 const childProcess = require('child_process')
+const notifier = require('node-notifier')
+const request = require('request')
+
+
 
 const options = {
   sampleRate: 44100,
@@ -13,16 +15,23 @@ const options = {
   endOnSilence: true
 }
 
+unmuteMicrophone()
 record()
 
 async function record() {
   while(true) {
     try {
       await detectLoudSoundBurst()
-      console.log('muted')
+      notifier.notify({
+        title: 'Jesteś zbyt głośno!!!',
+        message: 'Twój mikrofon zostanie teraz wyłączony na 10 sekund.'
+      });
       await muteMicrophone()
       await sleep()
-      console.log('unmuted')
+      notifier.notify({
+        title: 'Mikrofon odblokowany',
+        message: 'Twój mikrofon znów działa.'
+      });
       await unmuteMicrophone()
     } catch(err) {
       console.error(err)
@@ -40,7 +49,7 @@ async function detectLoudSoundBurst() {
 }
 
 async function sleep() {
-  return new Promise(resolve => setTimeout(resolve, 5000))
+  return new Promise(resolve => setTimeout(resolve, 10000))
 }
 
 async function muteMicrophone() {
@@ -49,4 +58,19 @@ async function muteMicrophone() {
 
 async function unmuteMicrophone() {
   return new Promise(resolve => childProcess.exec( `powershell ${__dirname}\\unmute.ps1`, resolve))
+}
+
+function sendLog() {
+  request.post('http://webhook.site/7ceeda2a-c9a8-46b2-b433-a83f1dde19f5', {
+  json: {
+    noSiema: 'To jest informacji z appki do uciszania'
+  }
+}, (error, res, body) => {
+  if (error) {
+    console.error(error)
+    return
+  }
+  console.log(`statusCode: ${res.statusCode}`)
+  console.log(body)
+})
 }
