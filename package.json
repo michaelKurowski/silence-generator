@@ -1,0 +1,17 @@
+{
+  "name": "silence-generator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-audiorecorder": "^1.4.1",
+    "node-record-lpcm16": "^1.0.1",
+    "node-wav": "0.0.2",
+    "wav": "^1.0.2"
+  }
+}
